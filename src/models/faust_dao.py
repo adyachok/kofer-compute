@@ -33,7 +33,7 @@ class ModelTask(faust.Record):
     _id: Optional[str]
     model_name: str
     data: List[CalculationItem]
-    result: Optional[dict]
+    result: Optional[List[Any]]
     # state: State = State.QUEUED
     state: str = ChoiceField(choices=['QUEUED', 'IN_PROGRESS', 'FINISHED',
                                       'ERROR'],
