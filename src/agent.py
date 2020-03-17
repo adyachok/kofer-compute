@@ -18,11 +18,16 @@ async def compute_agent(tasks):
         print(f'MYAGENT RECEIVED -- {task!r}')
         task.state = State.IN_PROGRESS.value
         await config.topics['model-tasks-done'].send(value=task)
-        async with aiohttp.ClientSession() as session:
-            response = await compute(session, task)
-            logger.info(f'Got next response {response}')
-            task.result = response.get('outputs', [])
-            task.state = State.FINISHED
+        try:
+            async with aiohttp.ClientSession() as session:
+                response = await compute(session, task)
+                logger.info(f'Got next response {response}')
+                task.result = response.get('outputs', [])
+                task.state = State.FINISHED
+                await config.topics['model-tasks-done'].send(value=task)
+        except aiohttp.client_exceptions.ClientConnectorError as e:
+            task.state = State.ERROR
+            tasks.result = [str(e)]
             await config.topics['model-tasks-done'].send(value=task)
         yield task
 
