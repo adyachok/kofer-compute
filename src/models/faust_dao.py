@@ -2,7 +2,7 @@ from abc import ABC
 from enum import Enum
 
 import faust
-from typing import Any, Optional
+from typing import Any, Optional, List
 
 from src.utils.fields import ChoiceField
 
@@ -22,10 +22,17 @@ class State(Enum):
     ERROR = 'ERROR'
 
 
+class CalculationItem(faust.Record):
+    name: str
+    type: str = ChoiceField(choices=['float', 'int', 'str', 'array', 'byte'],
+                            default='str')
+    value: Any
+
+
 class ModelTask(faust.Record):
     _id: Optional[str]
     model_name: str
-    data: dict
+    data: List[CalculationItem]
     result: Optional[dict]
     # state: State = State.QUEUED
     state: str = ChoiceField(choices=['QUEUED', 'IN_PROGRESS', 'FINISHED',
