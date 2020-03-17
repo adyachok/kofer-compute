@@ -27,7 +27,8 @@ async def compute_agent(tasks):
                 await config.topics['model-tasks-done'].send(value=task)
         except aiohttp.client_exceptions.ClientConnectorError as e:
             task.state = State.ERROR
-            tasks.result = [str(e)]
+            tasks.result = []
+            logger.error(f'Error occured while computing task {task._id}.')
             await config.topics['model-tasks-done'].send(value=task)
         yield task
 
@@ -38,7 +39,7 @@ async def compute(session, task):
         {"signature_name": "serving_default",
          "inputs": inputs})
 
-    url = f'http://{task.model_name}/v1/models/{task.model_name}:predict'
+    url = f'http://{task.model_name}:8501/v1/models/{task.model_name}:predict'
     if os.getenv('DEBUG_URLS'):
         url = f'https://mod-dummy-501-zz-test.22ad.bi-x.openshiftapps.com' \
               f'/v1/models/{task.model_name}:predict'
