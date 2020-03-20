@@ -5,4 +5,5 @@ Service is ment to execute model inference. Optionally it can execute third-part
 Python code (mostly provided by data scientists).
 
 ### Security
-Third party Python code is executed via (CodelJail)[https://github.com/edx/codejail]
+ - Third party Python code will be executed via [CodelJail](https://github.com/edx/codejail)
+ - The code will be tested on FAS-node by [Pyt](https://github.com/python-security/pyt)
