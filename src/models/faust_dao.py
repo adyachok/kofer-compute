@@ -24,6 +24,7 @@ class State(Enum):
 
 class CalculationItem(faust.Record):
     name: str
+    unit_step: str
     type: str = ChoiceField(choices=['float', 'int', 'str', 'array', 'byte'],
                             default='str')
     value: Any
