@@ -39,3 +39,10 @@ class ModelTask(faust.Record):
     state: str = ChoiceField(choices=['QUEUED', 'IN_PROGRESS', 'FINISHED',
                                       'ERROR'],
                              default='QUEUED', required=False)
+    runner_id: Optional[str] = ''
+    execution_state: Optional[int] = 0
+
+
+class ModelTaskDoEvent(faust.Record):
+    task: ModelTask
+    runner_code: Optional[str] = ''

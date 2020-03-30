@@ -1,6 +1,6 @@
 import os
 
-from src.models.faust_dao import ModelTask, ModelMetadata
+from src.models.faust_dao import ModelTask, ModelTaskDoEvent
 from src.utils.logger import get_logger
 
 
@@ -36,7 +36,7 @@ class Config:
 
     def _init_topics(self, app):
         self.topics['model-tasks-do'] = app.topic('model-tasks-do',
-                                                  value_type=ModelTask)
+                                                  value_type=ModelTaskDoEvent)
         self.topics['model-tasks-done'] = app.topic('model-tasks-done',
                                                     value_type=ModelTask)
 
