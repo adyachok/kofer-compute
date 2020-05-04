@@ -38,6 +38,7 @@ easily added.
 
 
 ![alt text][schema]
+
 [schema]: img/compute_schema.png "Title"
  
  
