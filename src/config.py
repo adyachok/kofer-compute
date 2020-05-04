@@ -3,12 +3,10 @@ import os
 from src.models.faust_dao import ModelTask, ModelTaskDoEvent
 from src.utils.logger import get_logger
 
-
 logger = get_logger('config')
 
 
 class Config:
-
     KAFKA_BROKER_URL = None
     WEB_PORT = None
 
@@ -23,6 +21,14 @@ class Config:
             'model-tasks-do': None,
             'model-tasksdone': None,
             'model-metadata-updates': None
+        }
+        self.debug_models = {
+            'mod-dummy':
+                'https://mod-dummy-501-zz-test.22ad.bi-x.openshiftapps.com'
+                '/v1/models/mod-dummy:predict',
+            'mod-text-class':
+                'https://mod-text-class-501-zz-test.22ad.bi-x.'
+                'openshiftapps.com/v1/models/mod-text-class:predict'
         }
 
     def _set_kafka_url(self):

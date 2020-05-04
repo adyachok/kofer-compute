@@ -54,14 +54,19 @@ def compute(session, task):
     url = f'http://{task.model_name}:8501/v1/models/{task.model_name}' \
           f':predict'
     if os.getenv('DEBUG_URLS'):
-        url = f'https://mod-dummy-501-zz-test.22ad.bi-x.' \
-              f'openshiftapps.com/v1/models/{task.model_name}:predict'
+        if task.model_name in ['mod-dummy', 'mod-text-class']:
+            url = config.debug_models[task.model_name]
 
     async def inner(data):
         is_of_calc_type = any([isinstance(i, CalculationItem) for i
                                in data])
         if is_of_calc_type:
-            inputs = [[item.value] for item in data]
+            if all([i.type in ['str', 'string'] for i in data]):
+                # Usually classification models (for example sentiment
+                # analysis accept list of strings, not list of list.)
+                inputs = [item.value for item in data]
+            else:
+                inputs = [[item.value] for item in data]
         else:
             inputs = data
         data = json.dumps(
